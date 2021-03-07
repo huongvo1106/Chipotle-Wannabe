@@ -52,7 +52,7 @@ public class jdbcpostgreSQLGUI {
             ResultSet result = stmt.executeQuery(sqlStatement);
     
             //OUTPUT
-            JOptionPane.showMessageDialog(null,"Dessert");
+            //JOptionPane.showMessageDialog(null,"Dessert");
             
             System.out.println("______________________________________");
             
@@ -93,7 +93,7 @@ public class jdbcpostgreSQLGUI {
             ResultSet result = stmt.executeQuery(sqlStatement);
     
             //OUTPUT
-            JOptionPane.showMessageDialog(null,"Drink");
+            //JOptionPane.showMessageDialog(null,"Drink");
             
             System.out.println("______________________________________");
             
@@ -132,7 +132,7 @@ public class jdbcpostgreSQLGUI {
             ResultSet result = stmt.executeQuery(sqlStatement);
     
             //OUTPUT
-            JOptionPane.showMessageDialog(null,"Entree");
+            //JOptionPane.showMessageDialog(null,"Entree");
             
             System.out.println("______________________________________");
             
@@ -170,7 +170,7 @@ public class jdbcpostgreSQLGUI {
             ResultSet result = stmt.executeQuery(sqlStatement);
     
             //OUTPUT
-            JOptionPane.showMessageDialog(null,"Side");
+            //JOptionPane.showMessageDialog(null,"Side");
             
             System.out.println("______________________________________");
           
