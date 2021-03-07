@@ -1,6 +1,7 @@
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
+import java.util.*;
 //import java.sql.DriverManager;
 /*
 CSCE 315
@@ -34,101 +35,177 @@ public class jdbcpostgreSQLGUI {
         //JOptionPane.showMessageDialog(null,"Order Info");
         // String c_name = JOptionPane.showInputDialog("Name: ");
         String c_name = JOptionPane.showInputDialog("Customer Info \nName: ");
+        boolean order = true;
         try{
-        
-          String [] food_choice = {"Dessert","Drink","Side","Entree"};
-          int choice = JOptionPane.showOptionDialog(null, "What do you want to order?", "Menu",
-          JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, food_choice, food_choice[0]);
-          String cus_lname = "";
-          if(choice == 0) {
+          while(order == true){  //if customer want to continue to order
+            String [] food_choice = {"Dessert","Drink","Side","Entree"};
+            int choice = JOptionPane.showOptionDialog(null, "What do you want to order?", "Menu",
+            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, food_choice, food_choice[0]);
+            String cus_lname = "";
+            if(choice == 0) {
             
             //create a statement object
-              Statement stmt = conn.createStatement();
-              //create an SQL statement
-              String sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Dessert\'";
-              //send statement to DBMS
-              ResultSet result = stmt.executeQuery(sqlStatement);
-      
-              //OUTPUT
-              JOptionPane.showMessageDialog(null,"Dessert from database");
-              
-              System.out.println("______________________________________");
+            Statement stmt = conn.createStatement();
+            //create an SQL statement
+            String sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Dessert\'";
+            //send statement to DBMS
+            ResultSet result = stmt.executeQuery(sqlStatement);
+    
+            //OUTPUT
+            JOptionPane.showMessageDialog(null,"Dessert");
             
-              while (result.next()) {
-                //System.out.println("get in the loop");
-                cus_lname += result.getString("Name")+"\n";
-                System.out.println(result.getString("Name"));
-              }
-              JOptionPane.showMessageDialog(null,cus_lname);
+            System.out.println("______________________________________");
+            
+            ArrayList<String> arr1 = new ArrayList<String>();
+            while (result.next()) {
+              cus_lname = result.getString("Name");
+              arr1.add(cus_lname);
+            }
+              
+            String [] dessert_choice = new String[arr1.size()];
+            for (int i = 0; i < arr1.size(); i++)
+            {
+              dessert_choice[i] = arr1.get(i);
+            }
+            
+            int d_choice = JOptionPane.showOptionDialog(null, "Select dessert: ", "Menu",
+            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, dessert_choice, dessert_choice[0]);
+//              JOptionPane.showMessageDialog(null,cus_lname);
+            // Continue the order
+            String [] moreDone = {"No","Yes"};
+            int md = JOptionPane.showOptionDialog(null, "Are you ready to pay?", null,
+            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+            if (md == 0){
+              order = true;
+            }
+            else {
+              order = false;
+            }
 
           } 
           else if(choice == 1) {
             
             //create a statement object
-              Statement stmt = conn.createStatement();
-              //create an SQL statement
-              String sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Drink\'";
-              //send statement to DBMS
-              ResultSet result = stmt.executeQuery(sqlStatement);
-      
-              //OUTPUT
-              JOptionPane.showMessageDialog(null,"Drink from database");
-              
-              System.out.println("______________________________________");
+            Statement stmt = conn.createStatement();
+            //create an SQL statement
+            String sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Drink\'";
+            //send statement to DBMS
+            ResultSet result = stmt.executeQuery(sqlStatement);
+    
+            //OUTPUT
+            JOptionPane.showMessageDialog(null,"Drink");
             
-              while (result.next()) {
-                //System.out.println("get in the loop");
-                cus_lname += result.getString("Name")+"\n";
-                System.out.println(result.getString("Name"));
-              }
-              JOptionPane.showMessageDialog(null,cus_lname);
+            System.out.println("______________________________________");
+            
+            ArrayList<String> arr2 = new ArrayList<String>();
+            while (result.next()) {
+              cus_lname = result.getString("Name");
+              arr2.add(cus_lname);
+            }
               
+            String [] drink_choice = new String[arr2.size()];
+            for (int i = 0; i < arr2.size(); i++)
+            {
+                drink_choice[i] = arr2.get(i);
+            }
+              
+            int dr_choice = JOptionPane.showOptionDialog(null, "Select drink: ", "Menu",
+            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, drink_choice, drink_choice[0]);
+            // Continue the order
+            String [] moreDone = {"No","Yes"};
+            int md = JOptionPane.showOptionDialog(null, "Are you ready to pay?", null,
+            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+            if (md == 0){
+              order = true;
+            }
+            else {
+              order = false;
+            }
+            
           } 
           else if(choice == 3) {
             //create a statement object
-              Statement stmt = conn.createStatement();
-              //create an SQL statement
-              String sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Entrée\'";
-              //send statement to DBMS
-              ResultSet result = stmt.executeQuery(sqlStatement);
-      
-              //OUTPUT
-              JOptionPane.showMessageDialog(null,"Entree from database");
-              
-              System.out.println("______________________________________");
+            Statement stmt = conn.createStatement();
+            //create an SQL statement
+            String sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Entrée\'";
+            //send statement to DBMS
+            ResultSet result = stmt.executeQuery(sqlStatement);
+    
+            //OUTPUT
+            JOptionPane.showMessageDialog(null,"Entree");
             
-              while (result.next()) {
-                //System.out.println("get in the loop");
-                cus_lname += result.getString("Name")+"\n";
-                System.out.println(result.getString("Name"));
-              }
-              JOptionPane.showMessageDialog(null,cus_lname);
+            System.out.println("______________________________________");
+            
+            ArrayList<String> arr3 = new ArrayList<String>();
+            while (result.next()) {
+              cus_lname = result.getString("Name");
+              arr3.add(cus_lname);
+            }
+              
+            String [] entree_choice = new String[arr3.size()];
+            for (int i = 0; i < arr3.size(); i++)
+            {
+                entree_choice[i] = arr3.get(i);
+            }
+            
+            int e_choice = JOptionPane.showOptionDialog(null, "Select entree: ", "Menu",
+            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, entree_choice, entree_choice[0]);
+            // Continue the order
+            String [] moreDone = {"No","Yes"};
+            int md = JOptionPane.showOptionDialog(null, "Are you ready to pay?", null,
+            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+            if (md == 0){
+              order = true;
+            }
+            else {
+              order = false;
+            }
           } 
           else if(choice == 2) {
             //create a statement object
-              Statement stmt = conn.createStatement();
-              //create an SQL statement
-              String sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Side\'";
-              //send statement to DBMS
-              ResultSet result = stmt.executeQuery(sqlStatement);
-      
-              //OUTPUT
-              JOptionPane.showMessageDialog(null,"Entree from database");
-              
-              System.out.println("______________________________________");
+            Statement stmt = conn.createStatement();
+            //create an SQL statement
+            String sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Side\'";
+            //send statement to DBMS
+            ResultSet result = stmt.executeQuery(sqlStatement);
+    
+            //OUTPUT
+            JOptionPane.showMessageDialog(null,"Side");
             
-              while (result.next()) {
-                //System.out.println("get in the loop");
-                cus_lname += result.getString("Name")+"\n";
-                System.out.println(result.getString("Name"));
-              }
-              JOptionPane.showMessageDialog(null,cus_lname);
-          } 
+            System.out.println("______________________________________");
           
-        }  catch (Exception e){
+            ArrayList<String> arr4 = new ArrayList<String>();
+            while (result.next()) {
+              cus_lname = result.getString("Name");
+              arr4.add(cus_lname);
+            }
+            
+            String [] side_choice = new String[arr4.size()];
+            for (int i = 0; i < arr4.size(); i++)
+            {
+              side_choice[i] = arr4.get(i);
+            }
+            
+            int s_choice = JOptionPane.showOptionDialog(null, "Select side: ", "Menu",
+            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, side_choice, side_choice[0]);
+              // Continue the order
+            String [] moreDone = {"No","Yes"};
+            int md = JOptionPane.showOptionDialog(null, "Are you ready to pay?", null,
+            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+            if (md == 0){
+              order = true;
+            }
+            else {
+              order = false;
+            }
+          } 
+        } // end while loop
+        JOptionPane.showMessageDialog(null,"Thank you for choosing our service! Hope to see you soon.");
+        }  //end try 
+        catch (Exception e){
           JOptionPane.showMessageDialog(null,"Error accessing Database.");
         }
-      }
+      } //end customer
       
 
 
@@ -163,7 +240,6 @@ public class jdbcpostgreSQLGUI {
                 cus_lname += result.getString("Name")+"\n";
                 System.out.println(result.getString("Name"));
                 
-
               }
           } 
           
