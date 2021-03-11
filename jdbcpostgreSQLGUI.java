@@ -32,8 +32,25 @@ public class jdbcpostgreSQLGUI
       e.printStackTrace();
       System.err.println(e.getClass().getName() + ": " + e.getMessage());
       System.exit(0);
-    } // end try catch
 
+<<<<<<< HEAD
+    } // end try catch
+    //Recommendation engine
+    recommendation rec = new recommendation();
+    System.out.println(rec.recToCustomer("B",1, conn)); //0 to prioritize stocks, 1 for price
+
+    String[] buttons = { "Admin", "Customer" };  // user selection
+    int answer = JOptionPane.showOptionDialog(null, "Are you a customer or admin?", "Chipotle Wannabe",
+      JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[0]);
+
+    String sqlStatement = "";
+    boolean cont = true;
+
+    if (answer == 1)  // Customer
+    {
+    	Double price = 0.00;  // total price of order
+      String c_name = JOptionPane.showInputDialog("Customer Info \nName: ");  // get customer name
+=======
     JFrame f= new JFrame("Chipotle Wannabe POS");
     f.setSize(800, 500);
     f.setLayout(null);
@@ -55,6 +72,7 @@ public class jdbcpostgreSQLGUI
     {
       Double price = 0.00;  // total price of order
       String c_name = JOptionPane.showInputDialog(f, "Customer Info \nName: ");  // get customer name
+>>>>>>> main
 
       // Order is filled in the following order: entree, side, drink, dessert
       ArrayList<Integer> entree = new ArrayList<Integer>();
@@ -68,7 +86,11 @@ public class jdbcpostgreSQLGUI
         while (cont == true)  // continue ordering more items
         {
           String[] food_choice = { "Entree", "Side", "Drink", "Dessert" };
+<<<<<<< HEAD
+          int item_type = JOptionPane.showOptionDialog(null, "What do you want to order?", "Menu",
+=======
           int item_type = JOptionPane.showOptionDialog(f, "What do you want to order?", "Menu",
+>>>>>>> main
             JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, food_choice, food_choice[0]);
           String menu_item = "";
 
@@ -97,6 +119,17 @@ public class jdbcpostgreSQLGUI
             }
 
             // display entree item buttons
+<<<<<<< HEAD
+            int e_choice = JOptionPane.showOptionDialog(null, "Select entree: ", "Menu", JOptionPane.DEFAULT_OPTION,
+              JOptionPane.QUESTION_MESSAGE, null, entree_items, entree_items[0]);
+            
+            entree.add(e_choice+1);  // store the customer's entree choice
+            
+            Statement stmt1 = conn.createStatement();
+            sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
+            ResultSet e_price = stmt1.executeQuery(sqlStatement);
+            
+=======
             int e_choice = JOptionPane.showOptionDialog(f, "Select entree: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, entree_items, entree_items[0]);
 
@@ -107,6 +140,7 @@ public class jdbcpostgreSQLGUI
             sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
             ResultSet e_price = stmt1.executeQuery(sqlStatement);
 
+>>>>>>> main
             while (e_price.next())
             { price += e_price.getDouble("Price"); }
           } 
@@ -135,6 +169,17 @@ public class jdbcpostgreSQLGUI
             }
 
             // display side item buttons
+<<<<<<< HEAD
+            int s_choice = JOptionPane.showOptionDialog(null, "Select side: ", "Menu", JOptionPane.DEFAULT_OPTION,
+              JOptionPane.QUESTION_MESSAGE, null, side_choice, side_choice[0]);
+            
+            side.add(s_choice+1);  // store the customer's side choice
+            
+            Statement stmt1 = conn.createStatement();
+            sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'S"+(s_choice+1)+"'";
+            ResultSet result1 = stmt1.executeQuery(sqlStatement);
+            
+=======
             int s_choice = JOptionPane.showOptionDialog(f, "Select side: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, side_items, side_items[0]);
             
@@ -145,6 +190,7 @@ public class jdbcpostgreSQLGUI
             sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'S"+(s_choice+1)+"'";
             ResultSet result1 = stmt1.executeQuery(sqlStatement);
 
+>>>>>>> main
             while (result1.next())
             { price += result1.getDouble("Price"); }
           }
@@ -172,6 +218,17 @@ public class jdbcpostgreSQLGUI
               drink_items[i] = arr3.get(i);
             }
 
+<<<<<<< HEAD
+            int b_choice = JOptionPane.showOptionDialog(null, "Select a drink: ", "Menu", JOptionPane.DEFAULT_OPTION,
+              JOptionPane.QUESTION_MESSAGE, null, drink_choice, drink_choice[0]);
+            
+            drink.add(b_choice+1);  // store customer's drink choice
+            
+            Statement stmt1 = conn.createStatement();
+            sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'B"+(b_choice+1)+"'";
+            ResultSet result1 = stmt1.executeQuery(sqlStatement);
+            
+=======
             int b_choice = JOptionPane.showOptionDialog(f, "Select a drink: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, drink_items, drink_items[0]);
 
@@ -182,6 +239,7 @@ public class jdbcpostgreSQLGUI
             sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'B"+(b_choice+1)+"'";
             ResultSet result1 = stmt1.executeQuery(sqlStatement);
 
+>>>>>>> main
             while (result1.next())
             { price += result1.getDouble("Price"); }
           } 
@@ -209,6 +267,19 @@ public class jdbcpostgreSQLGUI
               dessert_items[i] = arr4.get(i);
             }
 
+<<<<<<< HEAD
+            int d_choice = JOptionPane.showOptionDialog(null, "Select dessert: ", "Menu", JOptionPane.DEFAULT_OPTION,
+              JOptionPane.QUESTION_MESSAGE, null, dessert_choice, dessert_choice[0]);
+            
+            dessert.add(d_choice+1);    // store customer's dessert choice
+            
+            Statement stmt1 = conn.createStatement();
+            sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'D"+(d_choice+1)+"'";
+            ResultSet result1 = stmt1.executeQuery(sqlStatement);
+            
+            while (result1.next())
+            { price += result1.getDouble("Price"); }
+=======
             int d_choice = JOptionPane.showOptionDialog(f, "Select dessert: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, dessert_items, dessert_items[0]);
 
@@ -259,7 +330,17 @@ public class jdbcpostgreSQLGUI
                   }
                   
         	  } while (md == 1);
+>>>>>>> main
           }
+
+          // Continue the order
+          String[] moreDone = { "No", "Yes" };
+          int md = JOptionPane.showOptionDialog(null, "Are you ready to pay?", null, JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+          
+          if (md == 1)  // complete order
+          { cont = false; }
+
         } // end while loop
 
         Array e_arr = conn.createArrayOf("INTEGER", entree.toArray());
@@ -281,12 +362,21 @@ public class jdbcpostgreSQLGUI
         Statement stmt1 = conn.createStatement();
         sqlStatement = "INSERT INTO \"Orders\" (\"Order_ID\", \"Name\", \"Date\", \"Price_Total\", \"Entree\", \"Sides\", \"Desert\", \"Beverage\") VALUES ('"+orderID+"', '"+c_name+"', '"+java.time.LocalDate.now()+"', '"+price+"', '"+e_arr+"', '"+s_arr+"', '"+d_arr+"', '"+b_arr+"')";
         stmt1.executeUpdate(sqlStatement);
+<<<<<<< HEAD
+        
+        JOptionPane.showMessageDialog(null, "Thank you for choosing our service! Hope to see you soon.");
+=======
+>>>>>>> main
 
         JOptionPane.showMessageDialog(f, "Thank you for choosing our service! Hope to see you soon.");
       } // end try
       catch (Exception e)
       {
+<<<<<<< HEAD
+        JOptionPane.showMessageDialog(null, "Error accessing Database.");
+=======
         JOptionPane.showMessageDialog(f, "Error accessing Database.");
+>>>>>>> main
       }
     } // end customer
 
@@ -329,6 +419,24 @@ public class jdbcpostgreSQLGUI
 
             int e_choice = JOptionPane.showOptionDialog(f, "Select entree: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, entree_choice, entree_choice[0]);
+<<<<<<< HEAD
+            
+            Statement stmt1 = conn.createStatement();
+            String price = JOptionPane.showInputDialog("New price: ");
+            double newprice = Double.parseDouble(price);
+            
+            String sqlStatement1 = "UPDATE \"Menu\" SET \"Price\" = '"+newprice+"' WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
+            stmt1.executeUpdate(sqlStatement1);
+            
+            String[] moreDone = { "Yes", "No" };
+            int md = JOptionPane.showOptionDialog(null, "Do you make more changes?", null, JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+            
+            if (md == 1)
+            { cont = false; }
+          } 
+          
+=======
 
             Statement stmt1 = conn.createStatement();
             String price = JOptionPane.showInputDialog("New price: ");
@@ -356,6 +464,7 @@ public class jdbcpostgreSQLGUI
             if (md == 1)
             { cont = false; }
           }
+>>>>>>> main
         }
       }//end try
       catch (Exception e) {
