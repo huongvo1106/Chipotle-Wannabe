@@ -97,7 +97,7 @@ public class jdbcpostgreSQLGUI
             }
 
             // display entree item buttons
-            int e_choice = JOptionPane.showOptionDialog(f, "Select dessert: ", "Menu", JOptionPane.DEFAULT_OPTION,
+            int e_choice = JOptionPane.showOptionDialog(f, "Select entree: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, entree_items, entree_items[0]);
 
             entree.add(e_choice+1);  // store the customer's entree choice
@@ -135,7 +135,7 @@ public class jdbcpostgreSQLGUI
             }
 
             // display side item buttons
-            int s_choice = JOptionPane.showOptionDialog(f, "Select drink: ", "Menu", JOptionPane.DEFAULT_OPTION,
+            int s_choice = JOptionPane.showOptionDialog(f, "Select side: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, side_items, side_items[0]);
             
             side.add(s_choice+1);  // store the customer's side choice
@@ -209,7 +209,7 @@ public class jdbcpostgreSQLGUI
               dessert_items[i] = arr4.get(i);
             }
 
-            int d_choice = JOptionPane.showOptionDialog(f, "Select side: ", "Menu", JOptionPane.DEFAULT_OPTION,
+            int d_choice = JOptionPane.showOptionDialog(f, "Select dessert: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, dessert_items, dessert_items[0]);
 
             dessert.add(d_choice+1);    // store customer's dessert choice
@@ -249,8 +249,7 @@ public class jdbcpostgreSQLGUI
                 		  ordered[j] = orderedItems.get(j);
             		  }
 
-                	  System.out.println("which items would you like to remove");
-                      int remove_choice = JOptionPane.showOptionDialog(f, "Select side: ", "Menu", JOptionPane.DEFAULT_OPTION,
+                      int remove_choice = JOptionPane.showOptionDialog(f, "Which items would you like to remove?", "Menu", JOptionPane.DEFAULT_OPTION,
                               JOptionPane.QUESTION_MESSAGE, null, ordered, ordered[0]);
                       System.out.println(remove_choice);
                   }
