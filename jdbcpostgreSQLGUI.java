@@ -1,11 +1,8 @@
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import java.awt.*;
 import java.sql.*;
 import java.util.*;
 
+// import javax.swing.JFrame;
 //import java.sql.DriverManager;
 
 /*
@@ -33,11 +30,9 @@ public class jdbcpostgreSQLGUI
       System.err.println(e.getClass().getName() + ": " + e.getMessage());
       System.exit(0);
 
-<<<<<<< HEAD
     } // end try catch
     //Recommendation engine
-    recommendation rec = new recommendation();
-    System.out.println(rec.recToCustomer("B",1, conn)); //0 to prioritize stocks, 1 for price
+    recommendation rec = new recommendation(); //Start Recommendation Engine (NOT IN USE YET)
 
     String[] buttons = { "Admin", "Customer" };  // user selection
     int answer = JOptionPane.showOptionDialog(null, "Are you a customer or admin?", "Chipotle Wannabe",
@@ -50,47 +45,19 @@ public class jdbcpostgreSQLGUI
     {
     	Double price = 0.00;  // total price of order
       String c_name = JOptionPane.showInputDialog("Customer Info \nName: ");  // get customer name
-=======
-    JFrame f= new JFrame("Chipotle Wannabe POS");
-    f.setSize(800, 500);
-    f.setLayout(null);
-    f.setVisible(true);
-    f.setResizable(false);
-    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-    f.setLocation(dim.width/2-f.getSize().width/2, dim.height/2-f.getSize().height/2);
-    f.getContentPane().setBackground(new Color(198, 235, 190));
-
-    String[] buttons = { "Admin", "Customer" };  // user selection
-    int answer = JOptionPane.showOptionDialog(f, "Are you a customer or admin?", "Chipotle Wannabe",
-      JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[0]);
-
-    String sqlStatement = "";
-    boolean cont = true;
-
-    if (answer == 1)  // Customer
-    {
-      Double price = 0.00;  // total price of order
-      String c_name = JOptionPane.showInputDialog(f, "Customer Info \nName: ");  // get customer name
->>>>>>> main
 
       // Order is filled in the following order: entree, side, drink, dessert
       ArrayList<Integer> entree = new ArrayList<Integer>();
       ArrayList<Integer> side = new ArrayList<Integer>();
       ArrayList<Integer> drink = new ArrayList<Integer>();
       ArrayList<Integer> dessert = new ArrayList<Integer>();
-      ArrayList<String> orderedItems = new ArrayList<String>();
 
       try
       {
         while (cont == true)  // continue ordering more items
         {
           String[] food_choice = { "Entree", "Side", "Drink", "Dessert" };
-<<<<<<< HEAD
           int item_type = JOptionPane.showOptionDialog(null, "What do you want to order?", "Menu",
-=======
-          int item_type = JOptionPane.showOptionDialog(f, "What do you want to order?", "Menu",
->>>>>>> main
             JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, food_choice, food_choice[0]);
           String menu_item = "";
 
@@ -119,7 +86,6 @@ public class jdbcpostgreSQLGUI
             }
 
             // display entree item buttons
-<<<<<<< HEAD
             int e_choice = JOptionPane.showOptionDialog(null, "Select entree: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, entree_items, entree_items[0]);
             
@@ -129,18 +95,6 @@ public class jdbcpostgreSQLGUI
             sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
             ResultSet e_price = stmt1.executeQuery(sqlStatement);
             
-=======
-            int e_choice = JOptionPane.showOptionDialog(f, "Select entree: ", "Menu", JOptionPane.DEFAULT_OPTION,
-              JOptionPane.QUESTION_MESSAGE, null, entree_items, entree_items[0]);
-
-            entree.add(e_choice+1);  // store the customer's entree choice
-            orderedItems.add(entree_items[e_choice]);
-
-            Statement stmt1 = conn.createStatement();
-            sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
-            ResultSet e_price = stmt1.executeQuery(sqlStatement);
-
->>>>>>> main
             while (e_price.next())
             { price += e_price.getDouble("Price"); }
           } 
@@ -162,14 +116,13 @@ public class jdbcpostgreSQLGUI
             }
 
             // store side menu items in array list to display as buttons
-            String[] side_items = new String[arr2.size()];
+            String[] side_choice = new String[arr2.size()];
             for (int i = 0; i < arr2.size(); i++)
             {
-              side_items[i] = arr2.get(i);
+              side_choice[i] = arr2.get(i);
             }
 
             // display side item buttons
-<<<<<<< HEAD
             int s_choice = JOptionPane.showOptionDialog(null, "Select side: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, side_choice, side_choice[0]);
             
@@ -179,18 +132,6 @@ public class jdbcpostgreSQLGUI
             sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'S"+(s_choice+1)+"'";
             ResultSet result1 = stmt1.executeQuery(sqlStatement);
             
-=======
-            int s_choice = JOptionPane.showOptionDialog(f, "Select side: ", "Menu", JOptionPane.DEFAULT_OPTION,
-              JOptionPane.QUESTION_MESSAGE, null, side_items, side_items[0]);
-            
-            side.add(s_choice+1);  // store the customer's side choice
-            orderedItems.add(side_items[s_choice]);
-
-            Statement stmt1 = conn.createStatement();
-            sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'S"+(s_choice+1)+"'";
-            ResultSet result1 = stmt1.executeQuery(sqlStatement);
-
->>>>>>> main
             while (result1.next())
             { price += result1.getDouble("Price"); }
           }
@@ -212,13 +153,12 @@ public class jdbcpostgreSQLGUI
             }
 
             // store side menu items in array list to display as buttons
-            String[] drink_items = new String[arr3.size()];
+            String[] drink_choice = new String[arr3.size()];
             for (int i = 0; i < arr3.size(); i++)
             {
-              drink_items[i] = arr3.get(i);
+              drink_choice[i] = arr3.get(i);
             }
 
-<<<<<<< HEAD
             int b_choice = JOptionPane.showOptionDialog(null, "Select a drink: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, drink_choice, drink_choice[0]);
             
@@ -228,18 +168,6 @@ public class jdbcpostgreSQLGUI
             sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'B"+(b_choice+1)+"'";
             ResultSet result1 = stmt1.executeQuery(sqlStatement);
             
-=======
-            int b_choice = JOptionPane.showOptionDialog(f, "Select a drink: ", "Menu", JOptionPane.DEFAULT_OPTION,
-              JOptionPane.QUESTION_MESSAGE, null, drink_items, drink_items[0]);
-
-            drink.add(b_choice+1);  // store customer's drink choice
-            orderedItems.add(drink_items[b_choice]);
-
-            Statement stmt1 = conn.createStatement();
-            sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'B"+(b_choice+1)+"'";
-            ResultSet result1 = stmt1.executeQuery(sqlStatement);
-
->>>>>>> main
             while (result1.next())
             { price += result1.getDouble("Price"); }
           } 
@@ -261,13 +189,12 @@ public class jdbcpostgreSQLGUI
             }
 
             // store side menu items in array list to display as buttons
-            String[] dessert_items = new String[arr4.size()];
+            String[] dessert_choice = new String[arr4.size()];
             for (int i = 0; i < arr4.size(); i++)
             {
-              dessert_items[i] = arr4.get(i);
+              dessert_choice[i] = arr4.get(i);
             }
 
-<<<<<<< HEAD
             int d_choice = JOptionPane.showOptionDialog(null, "Select dessert: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, dessert_choice, dessert_choice[0]);
             
@@ -279,58 +206,6 @@ public class jdbcpostgreSQLGUI
             
             while (result1.next())
             { price += result1.getDouble("Price"); }
-=======
-            int d_choice = JOptionPane.showOptionDialog(f, "Select dessert: ", "Menu", JOptionPane.DEFAULT_OPTION,
-              JOptionPane.QUESTION_MESSAGE, null, dessert_items, dessert_items[0]);
-
-            dessert.add(d_choice+1);    // store customer's dessert choice
-            orderedItems.add(dessert_items[d_choice]);
-
-            Statement stmt1 = conn.createStatement();
-            sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'D"+(d_choice+1)+"'";
-            ResultSet result1 = stmt1.executeQuery(sqlStatement);
-
-            while (result1.next())
-            { price += result1.getDouble("Price"); }
-          }
-
-          // Continue the order
-          String[] moreDone = { "Yes", "No" };
-          int md = JOptionPane.showOptionDialog(f, "Total Price: "+price+"\nWould you like to order more?", null, JOptionPane.DEFAULT_OPTION,
-            JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
-
-          if (md == 1)  // done ordering
-          {
-        	  do
-        	  {
-        		  // display order and price here
-            	  for (int i = 0; i < orderedItems.size(); i++)
-            	  {
-            		  System.out.println(orderedItems.get(i));
-            	  }
-            	  
-                  String [] addRemove = {"Add", "Remove", "Complete Order"};
-                  md = JOptionPane.showOptionDialog(f, "Would you like to add or remove any items?", null, JOptionPane.DEFAULT_OPTION,
-                  JOptionPane.QUESTION_MESSAGE, null, addRemove, addRemove[0]);
-                  
-                  if (md == 1)  // remove items
-                  {
-                	  String ordered[] = new String[orderedItems.size()];              
-                	  for(int j =0;j<orderedItems.size();j++){
-                		  ordered[j] = orderedItems.get(j);
-            		  }
-
-                      int remove_choice = JOptionPane.showOptionDialog(f, "Which items would you like to remove?", "Menu", JOptionPane.DEFAULT_OPTION,
-                              JOptionPane.QUESTION_MESSAGE, null, ordered, ordered[0]);
-                      System.out.println(remove_choice);
-                  }
-                  else if (md == 2)  // complete order
-                  {
-                	  cont = false;
-                  }
-                  
-        	  } while (md == 1);
->>>>>>> main
           }
 
           // Continue the order
@@ -362,34 +237,26 @@ public class jdbcpostgreSQLGUI
         Statement stmt1 = conn.createStatement();
         sqlStatement = "INSERT INTO \"Orders\" (\"Order_ID\", \"Name\", \"Date\", \"Price_Total\", \"Entree\", \"Sides\", \"Desert\", \"Beverage\") VALUES ('"+orderID+"', '"+c_name+"', '"+java.time.LocalDate.now()+"', '"+price+"', '"+e_arr+"', '"+s_arr+"', '"+d_arr+"', '"+b_arr+"')";
         stmt1.executeUpdate(sqlStatement);
-<<<<<<< HEAD
         
         JOptionPane.showMessageDialog(null, "Thank you for choosing our service! Hope to see you soon.");
-=======
->>>>>>> main
 
-        JOptionPane.showMessageDialog(f, "Thank you for choosing our service! Hope to see you soon.");
       } // end try
       catch (Exception e)
       {
-<<<<<<< HEAD
         JOptionPane.showMessageDialog(null, "Error accessing Database.");
-=======
-        JOptionPane.showMessageDialog(f, "Error accessing Database.");
->>>>>>> main
       }
     } // end customer
 
     else if (answer == 0)  // Admin
     {
-      JOptionPane.showMessageDialog(f, "Admin");
+      JOptionPane.showMessageDialog(null, "Admin");
       String c_name = JOptionPane.showInputDialog("Admin Info \nName: ");
 
       try {
         while (cont == true)  // continue making changes
         {
           String[] food_choice = { "Entree", "Side", "Drink", "Dessert" };
-          int choice = JOptionPane.showOptionDialog(f, "Which item do you want to change price?", "Menu",
+          int choice = JOptionPane.showOptionDialog(null, "Which item do you want to change price?", "Menu",
             JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, food_choice, food_choice[0]);
           String menu_item = "";
 
@@ -417,9 +284,8 @@ public class jdbcpostgreSQLGUI
               entree_choice[i] = arr1.get(i);
             }
 
-            int e_choice = JOptionPane.showOptionDialog(f, "Select entree: ", "Menu", JOptionPane.DEFAULT_OPTION,
+            int e_choice = JOptionPane.showOptionDialog(null, "Select entree: ", "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, entree_choice, entree_choice[0]);
-<<<<<<< HEAD
             
             Statement stmt1 = conn.createStatement();
             String price = JOptionPane.showInputDialog("New price: ");
@@ -436,39 +302,10 @@ public class jdbcpostgreSQLGUI
             { cont = false; }
           } 
           
-=======
-
-            Statement stmt1 = conn.createStatement();
-            String price = JOptionPane.showInputDialog("New price: ");
-            double newprice = Double.parseDouble(price);
-
-            String[] confirmCancel = { "Confirm", "Cancel" };
-            int confirm = JOptionPane.showOptionDialog(f, "Changing price of "+entree_choice[e_choice]+" to $"+price, null, JOptionPane.DEFAULT_OPTION,
-              JOptionPane.QUESTION_MESSAGE, null, confirmCancel, confirmCancel[0]);
-
-            if (confirm == 0)  // update price
-            {
-                String sqlStatement1 = "UPDATE \"Menu\" SET \"Price\" = '"+newprice+"' WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
-                stmt1.executeUpdate(sqlStatement1);
-                JOptionPane.showMessageDialog(f, "Successfully updated price of "+entree_choice[e_choice]+" to $"+price+".");
-            }
-            else
-            {
-            	JOptionPane.showMessageDialog(f, "Price change canceled.");
-            }
-
-            String[] moreDone = { "Yes", "No" };
-            int md = JOptionPane.showOptionDialog(f, "Do you want to make more changes?", null, JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
-
-            if (md == 1)
-            { cont = false; }
-          }
->>>>>>> main
         }
       }//end try
       catch (Exception e) {
-        JOptionPane.showMessageDialog(f, "Error accessing Database.");
+        JOptionPane.showMessageDialog(null, "Error accessing Database.");
       } 
       
       
