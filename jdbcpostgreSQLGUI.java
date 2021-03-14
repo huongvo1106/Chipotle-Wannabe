@@ -1,4 +1,7 @@
 import javax.swing.JOptionPane;
+
+//import org.graalvm.compiler.lir.StandardOp.NullCheck;
+
 import java.sql.*;
 import java.util.*;
 
@@ -55,6 +58,8 @@ public class jdbcpostgreSQLGUI
       ArrayList<String> drinkAlt = new ArrayList<String>();
       ArrayList<Integer> dessert = new ArrayList<Integer>();
       ArrayList<String> dessertAlt = new ArrayList<String>();
+      ArrayList<String> orderedItems = new ArrayList<String>();
+
 
       try
       {
@@ -91,16 +96,35 @@ public class jdbcpostgreSQLGUI
 
             // display entree item buttons
             int e_choice = JOptionPane.showOptionDialog(null, "Select entree: \n We suggest: " + rec.recToCustomer("E", rec.priority, conn), "Menu", JOptionPane.DEFAULT_OPTION,
-                          JOptionPane.QUESTION_MESSAGE, null, entree_items, entree_items[0]);
+              JOptionPane.QUESTION_MESSAGE, null, entree_items, entree_items[0]);
+            Statement avail = conn.createStatement();
+            sqlStatement = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
+            ResultSet avail_check = avail.executeQuery(sqlStatement);
 
-            entree.add(e_choice+1);  // store the customer's entree choice
+            int stock = 0; 
+            while (avail_check.next()){
+              stock = avail_check.getInt("Stock");
+            }
 
-            Statement stmt1 = conn.createStatement();
-            sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
-            ResultSet e_price = stmt1.executeQuery(sqlStatement);
+            if (stock > 0){
+              entree.add(e_choice+1);  // store the customer's entree choice
+              orderedItems.add(entree_items[e_choice]);
 
-            while (e_price.next())
-            { price += e_price.getDouble("Price"); }
+              Statement stmt1 = conn.createStatement();
+              sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
+              ResultSet e_price = stmt1.executeQuery(sqlStatement);
+
+              while (e_price.next())
+              { price += e_price.getDouble("Price"); }
+
+              String sqlStatement1 = "UPDATE \"Menu\" SET \"Stock\" = '"+ (stock-1) + "'WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
+              stmt1.executeUpdate(sqlStatement1);
+            }
+            else {
+              String[] moreDone = { "Yes", "No" };
+              int md = JOptionPane.showOptionDialog(null, "We're sorry, the item you ordered is out of stock. \nWould you like to order something else?", 
+              null, JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+            }
 
             String entreeAltText = JOptionPane.showInputDialog("Do you have any topping alterations or special request?");
             entreeAlt.add(entreeAltText);  // store the customer's entree Alteration choice
@@ -110,7 +134,7 @@ public class jdbcpostgreSQLGUI
             // create a statement object
             Statement stmt = conn.createStatement();
             // create an SQL statement
-            sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Side\'";
+            sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Side\' ORDER BY \"Item_ID\"";
             // send statement to DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
 
@@ -132,15 +156,33 @@ public class jdbcpostgreSQLGUI
             // display side item buttons
             int s_choice = JOptionPane.showOptionDialog(null, "Select side: \n We suggest: " + rec.recToCustomer("S", rec.priority, conn), "Menu", JOptionPane.DEFAULT_OPTION,
                           JOptionPane.QUESTION_MESSAGE, null, side_choice, side_choice[0]);
+            Statement avail = conn.createStatement();
+            sqlStatement = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Item_ID\" = 'S"+(s_choice+1)+"'";
+            ResultSet avail_check = avail.executeQuery(sqlStatement);
 
-            side.add(s_choice+1);  // store the customer's side choice
+            int stock = 0; 
+            while (avail_check.next()){
+              stock = avail_check.getInt("Stock");
+            }
 
-            Statement stmt1 = conn.createStatement();
-            sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'S"+(s_choice+1)+"'";
-            ResultSet result1 = stmt1.executeQuery(sqlStatement);
+            if (stock > 0){
+              side.add(s_choice+1);  // store the customer's side choice
+              orderedItems.add(side_choice[s_choice]);
 
-            while (result1.next())
-            { price += result1.getDouble("Price"); }
+              Statement stmt1 = conn.createStatement();
+              sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'S"+(s_choice+1)+"'";
+              ResultSet result1 = stmt1.executeQuery(sqlStatement);
+
+              while (result1.next())
+              { price += result1.getDouble("Price"); }
+              String sqlStatement1 = "UPDATE \"Menu\" SET \"Stock\" = '"+ (stock-1) + "'WHERE \"Item_ID\" = 'S"+(s_choice+1)+"'";
+              stmt1.executeUpdate(sqlStatement1);
+            }
+            else {
+              String[] moreDone = { "Yes", "No" };
+              int md = JOptionPane.showOptionDialog(null, "We're sorry, the item you ordered is out of stock. \nWould you like to order something else?", 
+              null, JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+            }
 
             String sideAltText = JOptionPane.showInputDialog("Do you have any topping alterations or special request?");
             sideAlt.add(sideAltText);  // store the customer's entree Alteration choice
@@ -150,7 +192,7 @@ public class jdbcpostgreSQLGUI
             // create a statement object
             Statement stmt = conn.createStatement();
             // create an SQL statement
-            sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Drink\'";
+            sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Drink\' ORDER BY \"Item_ID\"";
             // send statement to DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
 
@@ -172,14 +214,35 @@ public class jdbcpostgreSQLGUI
             int b_choice = JOptionPane.showOptionDialog(null, "Select a drink: \n We suggest: " + rec.recToCustomer("B", rec.priority, conn), "Menu", JOptionPane.DEFAULT_OPTION,
                           JOptionPane.QUESTION_MESSAGE, null, drink_choice, drink_choice[0]);
 
-            drink.add(b_choice+1);  // store customer's drink choice
+            Statement avail = conn.createStatement();
+            sqlStatement = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Item_ID\" = 'B"+(b_choice+1)+"'";
+            ResultSet avail_check = avail.executeQuery(sqlStatement);
 
-            Statement stmt1 = conn.createStatement();
-            sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'B"+(b_choice+1)+"'";
-            ResultSet result1 = stmt1.executeQuery(sqlStatement);
+            int stock = 0; 
+            while (avail_check.next()){
+              stock = avail_check.getInt("Stock");
+            }
 
-            while (result1.next())
-            { price += result1.getDouble("Price"); }
+            if (stock > 0){
+              drink.add(b_choice+1);  // store customer's drink choice
+              orderedItems.add(drink_choice[b_choice]);
+
+              Statement stmt1 = conn.createStatement();
+              sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'B"+(b_choice+1)+"'";
+              ResultSet result1 = stmt1.executeQuery(sqlStatement);
+
+              while (result1.next())
+              { price += result1.getDouble("Price"); }
+
+              String sqlStatement1 = "UPDATE \"Menu\" SET \"Stock\" = '"+ (stock-1) + "'WHERE \"Item_ID\" = 'B"+(b_choice+1)+"'";
+              stmt1.executeUpdate(sqlStatement1);
+            }
+            else {
+              String[] moreDone = { "Yes", "No" };
+              int md = JOptionPane.showOptionDialog(null, "We're sorry, the item you ordered is out of stock. \nWould you like to order something else?", 
+              null, JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+  
+            }
 
             String drinkAltText = JOptionPane.showInputDialog("Do you have any topping alterations or special request?");
             drinkAlt.add(drinkAltText);  // store the customer's entree Alteration choice
@@ -189,7 +252,7 @@ public class jdbcpostgreSQLGUI
             // create a statement object
             Statement stmt = conn.createStatement();
             // create an SQL statement
-            sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Dessert\'";
+            sqlStatement = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Dessert\' ORDER BY \"Item_ID\"";
             // send statement to DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
 
@@ -211,24 +274,96 @@ public class jdbcpostgreSQLGUI
             int d_choice = JOptionPane.showOptionDialog(null, "Select dessert: \n We suggest: " + rec.recToCustomer("D", rec.priority, conn), "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, dessert_choice, dessert_choice[0]);
 
-            dessert.add(d_choice+1);    // store customer's dessert choice
+            Statement avail = conn.createStatement();
+            sqlStatement = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Item_ID\" = 'D"+(d_choice+1)+"'";
+            ResultSet avail_check = avail.executeQuery(sqlStatement);
 
-            Statement stmt1 = conn.createStatement();
-            sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'D"+(d_choice+1)+"'";
-            ResultSet result1 = stmt1.executeQuery(sqlStatement);
+            int stock = 0; 
+            while (avail_check.next()){
+              stock = avail_check.getInt("Stock");
+            }
 
-            while (result1.next())
-            { price += result1.getDouble("Price"); }
+            if (stock > 0){
+              dessert.add(d_choice+1);    // store customer's dessert choice
+              orderedItems.add(dessert_choice[d_choice]);
+
+              Statement stmt1 = conn.createStatement();
+              sqlStatement = "SELECT \"Price\" FROM \"Menu\" WHERE \"Item_ID\" = 'D"+(d_choice+1)+"'";
+              ResultSet result1 = stmt1.executeQuery(sqlStatement);
+
+              while (result1.next())
+              { price += result1.getDouble("Price"); }
+              String sqlStatement1 = "UPDATE \"Menu\" SET \"Stock\" = '"+ (stock-1) + "'WHERE \"Item_ID\" = 'D"+(d_choice+1)+"'";
+              stmt1.executeUpdate(sqlStatement1);
+            }
+            else {
+              String[] moreDone = { "Yes", "No" };
+              int md = JOptionPane.showOptionDialog(null, "We're sorry, the item you ordered is out of stock. \nWould you like to order something else?", 
+              null, JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+            }
 
             String dessertAltText = JOptionPane.showInputDialog("Do you have any topping alterations or special request?");
             dessertAlt.add(dessertAltText);  // store the customer's entree Alteration choice
           }
 
           // Continue the order
-          String[] moreDone = { "No", "Yes" };
-          int md = JOptionPane.showOptionDialog(null, "Are you ready to pay?", null, JOptionPane.DEFAULT_OPTION,
+          String[] moreDone = { "Yes", "No" };
+          int md = JOptionPane.showOptionDialog(null, "Total Price: "+price+"\nWould you like to order more?", null, JOptionPane.DEFAULT_OPTION,
             JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
 
+          if (md == 1)  // done ordering
+          {
+        	  do
+        	  {
+        		  // display order and price here
+            	  for (int i = 0; i < orderedItems.size(); i++)
+            	  {
+            		  System.out.println(orderedItems.get(i));
+            	  }
+            	  
+                  String [] addRemove = {"Add", "Remove", "Complete Order"};
+                  md = JOptionPane.showOptionDialog(null, "Would you like to add or remove any items?", null, JOptionPane.DEFAULT_OPTION,
+                  JOptionPane.QUESTION_MESSAGE, null, addRemove, addRemove[0]);
+                  
+                  if (md == 1)  // remove items
+                  {
+                	  String ordered[] = new String[orderedItems.size()];              
+                	  for(int j =0;j<orderedItems.size();j++){
+                		  ordered[j] = orderedItems.get(j);
+            		  }
+
+                      int remove_choice = JOptionPane.showOptionDialog(null, "Which items would you like to remove?", "Menu", JOptionPane.DEFAULT_OPTION,
+                              JOptionPane.QUESTION_MESSAGE, null, ordered, ordered[0]);
+
+                      String item_removed = ordered[remove_choice];
+                      System.out.println("removing: " + item_removed);
+                      int stockInt = 0;
+                      Statement stock = conn.createStatement();
+                      String stockCheck = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Name\" = \'"+ item_removed +"\'";
+                      ResultSet resultStock = stock.executeQuery(stockCheck);
+                      
+                      while (resultStock.next())
+                      { stockInt = resultStock.getInt("Stock"); }
+
+                      stockInt += 1;
+                      String sqlStatement2 = "UPDATE \"Menu\" SET \"Stock\" = '"+ stockInt + "'WHERE \"Name\" = '"+ item_removed +"'";
+                      stock.executeUpdate(sqlStatement2);
+                      System.out.println("stock: " + stockInt);
+                    
+                  }
+                  else if (md == 2)  // complete order
+                  {
+                	  cont = false;
+                  }
+                  
+        	  } while (md == 1);
+          }
+
+          // Continue the order
+          String[] moreDone1 = {"No", "Yes"};
+          md = JOptionPane.showOptionDialog(null, "Are you ready to pay?", null, JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE, null, moreDone1, moreDone1[0]);
+          
           if (md == 1)  // complete order
           { cont = false; }
 
@@ -257,6 +392,88 @@ public class jdbcpostgreSQLGUI
         Statement stmt1 = conn.createStatement();
         sqlStatement = "INSERT INTO \"Orders\" (\"Order_ID\", \"Name\", \"Date\", \"Price_Total\", \"Entree\", \"Entree_Alterations\", \"Sides\", \"Sides_Alterations\", \"Dessert\", \"Dessert_Alterations\", \"Beverage\", \"Beverage_Alterations\") VALUES ('"+orderID+"', '"+c_name+"', '"+java.time.LocalDate.now()+"', '"+price+"', '"+e_arr+"', '"+eAlt_arr+"', '"+s_arr+"', '"+sAlt_arr+"', '"+d_arr+"', '"+dAlt_arr+"', '"+b_arr+"', '"+bAlt_arr+"')";
         stmt1.executeUpdate(sqlStatement);
+
+        // PRINT ORDER
+        String summarize = "";
+        
+        Statement stm = conn.createStatement();
+        sqlStatement = "SELECT * FROM \"Orders\" ORDER BY \"Order_ID\" DESC LIMIT 1";
+        ResultSet r = stm.executeQuery(sqlStatement);
+
+        r.next();
+        
+        summarize += "Customer's name: ";
+        summarize += r.getString("Name") + "\n";
+        
+        
+        //print out entree
+        for(int s: entree){
+          //create statement object
+          Statement stmt3 = conn.createStatement();
+          // create sql statement
+          String sqlStatement1 = "SELECT \"Name\" FROM \"Menu\" WHERE \"Item_ID\" = \'E"+s+"\'";
+          //create send statement to DBMS
+          ResultSet result = stmt3.executeQuery(sqlStatement1);
+          String value = "";
+          while(result.next()){
+            value = result.getString(1);
+            System.out.println(value);
+          }
+          summarize += value + "\n";
+        }
+        //print out side items
+        
+        for(int s : side){
+          
+          //create statement object
+          Statement stmt3 = conn.createStatement();
+          // create sql statement
+          String sqlStatement1 = "SELECT \"Name\" FROM \"Menu\" WHERE \"Item_ID\" = \'S"+s+"\'";
+          //create send statement to DBMS
+          ResultSet result = stmt3.executeQuery(sqlStatement1);
+          String value = "";
+          while(result.next()){
+            value = result.getString(1);
+            System.out.println(value);
+          }
+          summarize += value + "\n"; 
+        }
+        //print out drink
+        for(int s : drink){
+          
+          //create statement object
+          Statement stmt3 = conn.createStatement();
+          // create sql statement
+          String sqlStatement1 = "SELECT \"Name\" FROM \"Menu\" WHERE \"Item_ID\" = \'B"+s+"\'";
+          //create send statement to DBMS
+          ResultSet result = stmt3.executeQuery(sqlStatement1);
+          String value = "";
+          while(result.next()){
+            value = result.getString(1);
+            System.out.println(value);
+          }
+          summarize += value + "\n"; 
+        }
+        //print out dessert
+        for(int s : dessert){
+          //create statement object
+          Statement stmt3 = conn.createStatement();
+          // create sql statement
+          String sqlStatement1 = "SELECT \"Name\" FROM \"Menu\" WHERE \"Item_ID\" = \'D"+s+"\'";
+          //create send statement to DBMS
+          ResultSet result = stmt3.executeQuery(sqlStatement1);
+          String value = "";
+          while(result.next()){
+            value = result.getString(1);
+            System.out.println(value);
+          }
+          summarize += value + "\n"; 
+        }
+        
+        summarize += "The total price is: " + r.getDouble("Price_Total") + "\n";
+        //print out the whole order
+        JOptionPane.showMessageDialog(null, summarize);
+
 
         JOptionPane.showMessageDialog(null, "Thank you for choosing our service! Hope to see you soon.");
 
@@ -519,38 +736,6 @@ public class jdbcpostgreSQLGUI
       catch (Exception e) {
         JOptionPane.showMessageDialog(null, "Error accessing Database.");
       }
-
-
     } // end admin
-    /*
-     *
-     * //closing the connection JOptionPane.showMessageDialog(null,"Order Info");
-     * String c_name = JOptionPane.showInputDialog("Name: "); try{
-     *
-     * String [] food_choice = {"Dessert","Drink"}; int choice =
-     * JOptionPane.showOptionDialog(null, "Are you a customer or admin?",
-     * "something", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-     * buttons, buttons[0]); if(choice == 0) { //create a statement object Statement
-     * stmt = conn.createStatement(); //create an SQL statement String sqlStatement
-     * = "SELECT * FROM \"Menu\" WHERE \"Type\" =\'Dessert\'"; //send statement to
-     * DBMS ResultSet result = stmt.executeQuery(sqlStatement);
-     *
-     * //OUTPUT
-     * JOptionPane.showMessageDialog(null,"Customer Last names from the Database.");
-     *
-     * System.out.println("______________________________________");
-     *
-     * while (result.next()) { //System.out.println("get in the loop"); menu_item +=
-     * result.getString("Name")+"\n"; System.out.println(result.getString("Name"));
-     *
-     * } }
-     *
-     * } catch (Exception e){
-     * JOptionPane.showMessageDialog(null,"Error accessing Database."); }
-     * JOptionPane.showMessageDialog(null,menu_item); try { conn.close();
-     * JOptionPane.showMessageDialog(null,"Connection Closed."); } catch(Exception
-     * e) { JOptionPane.showMessageDialog(null,"Connection NOT Closed."); }//end try
-     * catch
-     */
   }// end main
 }// end Class
