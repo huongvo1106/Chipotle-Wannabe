@@ -90,8 +90,8 @@ public class jdbcpostgreSQLGUI
             }
 
             // display entree item buttons
-            int e_choice = JOptionPane.showOptionDialog(null, "Select entree: ", "Menu", JOptionPane.DEFAULT_OPTION,
-              JOptionPane.QUESTION_MESSAGE, null, entree_items, entree_items[0]);
+            int e_choice = JOptionPane.showOptionDialog(null, "Select entree: \n We suggest: " + rec.recToCustomer("E", rec.priority, conn), "Menu", JOptionPane.DEFAULT_OPTION,
+                          JOptionPane.QUESTION_MESSAGE, null, entree_items, entree_items[0]);
 
             entree.add(e_choice+1);  // store the customer's entree choice
 
@@ -130,8 +130,8 @@ public class jdbcpostgreSQLGUI
             }
 
             // display side item buttons
-            int s_choice = JOptionPane.showOptionDialog(null, "Select side: ", "Menu", JOptionPane.DEFAULT_OPTION,
-              JOptionPane.QUESTION_MESSAGE, null, side_choice, side_choice[0]);
+            int s_choice = JOptionPane.showOptionDialog(null, "Select side: \n We suggest: " + rec.recToCustomer("S", rec.priority, conn), "Menu", JOptionPane.DEFAULT_OPTION,
+                          JOptionPane.QUESTION_MESSAGE, null, side_choice, side_choice[0]);
 
             side.add(s_choice+1);  // store the customer's side choice
 
@@ -169,8 +169,8 @@ public class jdbcpostgreSQLGUI
               drink_choice[i] = arr3.get(i);
             }
 
-            int b_choice = JOptionPane.showOptionDialog(null, "Select a drink: ", "Menu", JOptionPane.DEFAULT_OPTION,
-              JOptionPane.QUESTION_MESSAGE, null, drink_choice, drink_choice[0]);
+            int b_choice = JOptionPane.showOptionDialog(null, "Select a drink: \n We suggest: " + rec.recToCustomer("B", rec.priority, conn), "Menu", JOptionPane.DEFAULT_OPTION,
+                          JOptionPane.QUESTION_MESSAGE, null, drink_choice, drink_choice[0]);
 
             drink.add(b_choice+1);  // store customer's drink choice
 
@@ -208,7 +208,7 @@ public class jdbcpostgreSQLGUI
               dessert_choice[i] = arr4.get(i);
             }
 
-            int d_choice = JOptionPane.showOptionDialog(null, "Select dessert: ", "Menu", JOptionPane.DEFAULT_OPTION,
+            int d_choice = JOptionPane.showOptionDialog(null, "Select dessert: \n We suggest: " + rec.recToCustomer("D", rec.priority, conn), "Menu", JOptionPane.DEFAULT_OPTION,
               JOptionPane.QUESTION_MESSAGE, null, dessert_choice, dessert_choice[0]);
 
             dessert.add(d_choice+1);    // store customer's dessert choice
