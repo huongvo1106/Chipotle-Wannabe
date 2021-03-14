@@ -20,5 +20,6 @@ Isabel
 
 General:
 a) Need back button for customer orders entree selection -> type selection without selecting entree
-b) Need to implement a section for manager recommendation in GUI
-c) Need to display customer recommendation when customer clicks entree or dessert or side etc.
+b) Need to implement a section for manager recommendation in GUI DONE
+c) Need to display customer recommendation when customer clicks entree or dessert or side etc. DONE
+d) The only price changes that work are for Entrees, other types cannot be changed.

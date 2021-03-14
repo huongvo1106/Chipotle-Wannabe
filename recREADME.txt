@@ -1,5 +1,8 @@
-Current version: v2.0
+Current version: v3.0
 Recommendation engine for java gui
+
+Both features have been implemented in GUI
+
 
 (changelog:)
 v1.0

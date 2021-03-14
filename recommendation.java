@@ -6,6 +6,7 @@ public class recommendation
 	//Initializers
 	dbSetup my = new dbSetup();
 	Connection conn = null;
+	Integer priority = 1;
 	recommendation()
 	{
 		
@@ -346,7 +347,7 @@ public class recommendation
 		String out = "";
 		
 		//Prompt
-		out+="Summary for " + startDate.date + "-" + endDate.date + "\n\n";
+		out+="Summary for " + startDate.date + "-" + endDate.date + "\n";
 		out+="Sales: \n";
 		
 		out+="\n Entrees: \n";
@@ -362,7 +363,7 @@ public class recommendation
 		out+=typeSummary(drinksSales, "B", conn);
 		
 		//Recommendation
-		out+="\n Recommendations: \n\n";
+		out+="\n Recommendations: \n";
 		
 		out+="\n Entrees: \n";
 		out+=typeRecommendation(entreeSales, "E",conn);
