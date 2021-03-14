@@ -489,252 +489,277 @@ public class jdbcpostgreSQLGUI
       Double newprice = -0.01;
       JOptionPane.showMessageDialog(null, "Admin");
       String c_name = JOptionPane.showInputDialog("Admin Info \nName: ");
+      
+      String[] sumOrPrice = {"Summary", "Change Prices"};
+      int action = JOptionPane.showOptionDialog(null, "Do you want to view a summary or change prices?", "Menu",
+              JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, sumOrPrice, sumOrPrice[0]);
+      if(action == 0)
+      {
+     	 String start_d = JOptionPane.showInputDialog("Give a start day ");
+     	 String start_m = JOptionPane.showInputDialog("Give a start month ");
+     	 String start_y = JOptionPane.showInputDialog("Give a start year ");
+     	 String end_d = JOptionPane.showInputDialog("Give an end day ");
+     	 String end_m = JOptionPane.showInputDialog("Give an end month ");
+     	 String end_y = JOptionPane.showInputDialog("Give an end year ");
+     	 
+     	 dateStruct startDate = new dateStruct(start_d,start_m,start_y);
+     	 dateStruct endDate = new dateStruct(end_d,end_m,end_y);
+     	 
+     	 String sum = rec.Summary(startDate, endDate, conn);
+     	 JOptionPane.showMessageDialog(null, sum);
+     	 
+     	 
+     	 
+      }
+      else if(action == 1)
+      {
 
-      try {
-        while (cont == true)  // continue making changes
-        {
-          String[] food_choice = { "Entree", "Side", "Drink", "Dessert" };
-          int choice = JOptionPane.showOptionDialog(null, "Which item do you want to change price?", "Menu",
-            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, food_choice, food_choice[0]);
-          String menu_item = "";
-
-          if (choice == 0) // order entree
-          {
-            // create a statement object
-            Statement stmt = conn.createStatement();
-            // create an SQL statement
-            String sqlStatement2 = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Entree\' ORDER BY \"Item_ID\"";
-            // send statement to DBMS
-            ResultSet result = stmt.executeQuery(sqlStatement2);
-
-            // retrieve all entree items from menu table
-            ArrayList<String> arr1 = new ArrayList<String>();
-            while (result.next())
-            {
-              menu_item = result.getString("Name");
-              arr1.add(menu_item);
-            }
-
-            // store entree menu items in array list to display as buttons
-            String[] entree_choice = new String[arr1.size()];
-            for (int i = 0; i < arr1.size(); i++)
-            {
-              entree_choice[i] = arr1.get(i);
-            }
-
-            int e_choice = JOptionPane.showOptionDialog(null, "Select entree: ", "Menu", JOptionPane.DEFAULT_OPTION,
-              JOptionPane.QUESTION_MESSAGE, null, entree_choice, entree_choice[0]);
-
-            Statement stmt1 = conn.createStatement();
-
-            // Select item and check stock
-            int stockInt = 0;
-            Statement stock = conn.createStatement();
-            String stockCheck = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
-            ResultSet resultStock = stock.executeQuery(stockCheck);
-            while (resultStock.next())
-            { stockInt = resultStock.getInt("Stock"); }
-
-            if (stockInt > 0) {
-              // do while for error checking price
-              do {
-                String priceAdmin = JOptionPane.showInputDialog("New price: ");
-                // If does error checking on null, empty, and letters.
-                if (!(priceAdmin == null) && !priceAdmin.isEmpty() && !priceAdmin.matches("[a-zA-Z]+"))
-                  newprice = Double.parseDouble(priceAdmin);
-              } while (!(newprice >= 0.00));
-              String sqlStatement1 = "UPDATE \"Menu\" SET \"Price\" = '"+ newprice +"' WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
-              stmt1.executeUpdate(sqlStatement1);
-            } else {
-              JOptionPane.showMessageDialog(null,"Stock count is 0");
-            }
-
-            String[] moreDone = { "Yes", "No" };
-            int md = JOptionPane.showOptionDialog(null, "Do you make more changes?", null, JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
-
-            if (md == 1)
-            { cont = false; }
-          }
-          if (choice == 1) // order Side
-          {
-            // create a statement object
-            Statement stmt = conn.createStatement();
-            // create an SQL statement
-            String sqlStatement2 = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Side\' ORDER BY \"Item_ID\"";
-            // send statement to DBMS
-            ResultSet result = stmt.executeQuery(sqlStatement2);
-
-            // retrieve all entree items from menu table
-            ArrayList<String> arr1 = new ArrayList<String>();
-            while (result.next())
-            {
-              menu_item = result.getString("Name");
-              arr1.add(menu_item);
-            }
-
-            // store entree menu items in array list to display as buttons
-            String[] entree_choice = new String[arr1.size()];
-            for (int i = 0; i < arr1.size(); i++)
-            {
-              entree_choice[i] = arr1.get(i);
-            }
-
-            int e_choice = JOptionPane.showOptionDialog(null, "Select side: ", "Menu", JOptionPane.DEFAULT_OPTION,
-              JOptionPane.QUESTION_MESSAGE, null, entree_choice, entree_choice[0]);
-
-            Statement stmt1 = conn.createStatement();
-
-            // Select item and check stock
-            int stockInt = 0;
-            Statement stock = conn.createStatement();
-            String stockCheck = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Item_ID\" = 'S"+(e_choice+1)+"'";
-            ResultSet resultStock = stock.executeQuery(stockCheck);
-            while (resultStock.next())
-            { stockInt = resultStock.getInt("Stock"); }
-
-            if (stockInt > 0) {
-              // do while for error checking price
-              do {
-                String priceAdmin = JOptionPane.showInputDialog("New price: ");
-                // If does error checking on null, empty, and letters.
-                if (!(priceAdmin == null) && !priceAdmin.isEmpty() && !priceAdmin.matches("[a-zA-Z]+"))
-                  newprice = Double.parseDouble(priceAdmin);
-              } while (!(newprice >= 0.00));
-              String sqlStatement1 = "UPDATE \"Menu\" SET \"Price\" = '"+ newprice +"' WHERE \"Item_ID\" = 'S"+(e_choice+1)+"'";
-              stmt1.executeUpdate(sqlStatement1);
-            } else {
-              JOptionPane.showMessageDialog(null,"Stock count is 0");
-            }
-
-            String[] moreDone = { "Yes", "No" };
-            int md = JOptionPane.showOptionDialog(null, "Do you make more changes?", null, JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
-
-            if (md == 1)
-            { cont = false; }
-          }
-          if (choice == 2) // order Drink
-          {
-            // create a statement object
-            Statement stmt = conn.createStatement();
-            // create an SQL statement
-            String sqlStatement2 = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Drink\' ORDER BY \"Item_ID\"";
-            // send statement to DBMS
-            ResultSet result = stmt.executeQuery(sqlStatement2);
-
-            // retrieve all entree items from menu table
-            ArrayList<String> arr1 = new ArrayList<String>();
-            while (result.next())
-            {
-              menu_item = result.getString("Name");
-              arr1.add(menu_item);
-            }
-
-            // store entree menu items in array list to display as buttons
-            String[] entree_choice = new String[arr1.size()];
-            for (int i = 0; i < arr1.size(); i++)
-            {
-              entree_choice[i] = arr1.get(i);
-            }
-
-            int e_choice = JOptionPane.showOptionDialog(null, "Select drink: ", "Menu", JOptionPane.DEFAULT_OPTION,
-              JOptionPane.QUESTION_MESSAGE, null, entree_choice, entree_choice[0]);
-
-            Statement stmt1 = conn.createStatement();
-
-            // Select item and check stock
-            int stockInt = 0;
-            Statement stock = conn.createStatement();
-            String stockCheck = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Item_ID\" = 'B"+(e_choice+1)+"'";
-            ResultSet resultStock = stock.executeQuery(stockCheck);
-            while (resultStock.next())
-            { stockInt = resultStock.getInt("Stock"); }
-
-            if (stockInt > 0) {
-              // do while for error checking price
-              do {
-                String priceAdmin = JOptionPane.showInputDialog("New price: ");
-                // If does error checking on null, empty, and letters.
-                if (!(priceAdmin == null) && !priceAdmin.isEmpty() && !priceAdmin.matches("[a-zA-Z]+"))
-                  newprice = Double.parseDouble(priceAdmin);
-              } while (!(newprice >= 0.00));
-              String sqlStatement1 = "UPDATE \"Menu\" SET \"Price\" = '"+ newprice +"' WHERE \"Item_ID\" = 'B"+(e_choice+1)+"'";
-              stmt1.executeUpdate(sqlStatement1);
-            } else {
-              JOptionPane.showMessageDialog(null,"Stock count is 0");
-            }
-
-            String[] moreDone = { "Yes", "No" };
-            int md = JOptionPane.showOptionDialog(null, "Do you make more changes?", null, JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
-
-            if (md == 1)
-            { cont = false; }
-          }
-          if (choice == 3) // order dessert
-          {
-            // create a statement object
-            Statement stmt = conn.createStatement();
-            // create an SQL statement
-            String sqlStatement2 = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Dessert\' ORDER BY \"Item_ID\"";
-            // send statement to DBMS
-            ResultSet result = stmt.executeQuery(sqlStatement2);
-
-            // retrieve all entree items from menu table
-            ArrayList<String> arr1 = new ArrayList<String>();
-            while (result.next())
-            {
-              menu_item = result.getString("Name");
-              arr1.add(menu_item);
-            }
-
-            // store entree menu items in array list to display as buttons
-            String[] entree_choice = new String[arr1.size()];
-            for (int i = 0; i < arr1.size(); i++)
-            {
-              entree_choice[i] = arr1.get(i);
-            }
-
-            int e_choice = JOptionPane.showOptionDialog(null, "Select dessert: ", "Menu", JOptionPane.DEFAULT_OPTION,
-              JOptionPane.QUESTION_MESSAGE, null, entree_choice, entree_choice[0]);
-
-            Statement stmt1 = conn.createStatement();
-
-            // Select item and check stock
-            int stockInt = 0;
-            Statement stock = conn.createStatement();
-            String stockCheck = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Item_ID\" = 'D"+(e_choice+1)+"'";
-            ResultSet resultStock = stock.executeQuery(stockCheck);
-            while (resultStock.next())
-            { stockInt = resultStock.getInt("Stock"); }
-
-            if (stockInt > 0) {
-              // do while for error checking price
-              do {
-                String priceAdmin = JOptionPane.showInputDialog("New price: ");
-                // If does error checking on null, empty, and letters.
-                if (!(priceAdmin == null) && !priceAdmin.isEmpty() && !priceAdmin.matches("[a-zA-Z]+"))
-                  newprice = Double.parseDouble(priceAdmin);
-              } while (!(newprice >= 0.00));
-              String sqlStatement1 = "UPDATE \"Menu\" SET \"Price\" = '"+ newprice +"' WHERE \"Item_ID\" = 'D"+(e_choice+1)+"'";
-              stmt1.executeUpdate(sqlStatement1);
-            } else {
-              JOptionPane.showMessageDialog(null,"Stock count is 0");
-            }
-
-            String[] moreDone = { "Yes", "No" };
-            int md = JOptionPane.showOptionDialog(null, "Do you make more changes?", null, JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
-
-            if (md == 1)
-            { cont = false; }
-          }
-
-        }
-      }//end try
-      catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error accessing Database.");
+	      try {
+	        while (cont == true)  // continue making changes
+	        {
+	          String[] food_choice = { "Entree", "Side", "Drink", "Dessert" };
+	          int choice = JOptionPane.showOptionDialog(null, "Which item do you want to change price?", "Menu",
+	            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, food_choice, food_choice[0]);
+	          String menu_item = "";
+	
+	          if (choice == 0) // order entree
+	          {
+	            // create a statement object
+	            Statement stmt = conn.createStatement();
+	            // create an SQL statement
+	            String sqlStatement2 = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Entree\' ORDER BY \"Item_ID\"";
+	            // send statement to DBMS
+	            ResultSet result = stmt.executeQuery(sqlStatement2);
+	
+	            // retrieve all entree items from menu table
+	            ArrayList<String> arr1 = new ArrayList<String>();
+	            while (result.next())
+	            {
+	              menu_item = result.getString("Name");
+	              arr1.add(menu_item);
+	            }
+	
+	            // store entree menu items in array list to display as buttons
+	            String[] entree_choice = new String[arr1.size()];
+	            for (int i = 0; i < arr1.size(); i++)
+	            {
+	              entree_choice[i] = arr1.get(i);
+	            }
+	
+	            int e_choice = JOptionPane.showOptionDialog(null, "Select entree: ", "Menu", JOptionPane.DEFAULT_OPTION,
+	              JOptionPane.QUESTION_MESSAGE, null, entree_choice, entree_choice[0]);
+	
+	            Statement stmt1 = conn.createStatement();
+	
+	            // Select item and check stock
+	            int stockInt = 0;
+	            Statement stock = conn.createStatement();
+	            String stockCheck = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
+	            ResultSet resultStock = stock.executeQuery(stockCheck);
+	            while (resultStock.next())
+	            { stockInt = resultStock.getInt("Stock"); }
+	
+	            if (stockInt > 0) {
+	              // do while for error checking price
+	              do {
+	                String priceAdmin = JOptionPane.showInputDialog("New price: ");
+	                // If does error checking on null, empty, and letters.
+	                if (!(priceAdmin == null) && !priceAdmin.isEmpty() && !priceAdmin.matches("[a-zA-Z]+"))
+	                  newprice = Double.parseDouble(priceAdmin);
+	              } while (!(newprice >= 0.00));
+	              String sqlStatement1 = "UPDATE \"Menu\" SET \"Price\" = '"+ newprice +"' WHERE \"Item_ID\" = 'E"+(e_choice+1)+"'";
+	              stmt1.executeUpdate(sqlStatement1);
+	            } else {
+	              JOptionPane.showMessageDialog(null,"Stock count is 0");
+	            }
+	
+	            String[] moreDone = { "Yes", "No" };
+	            int md = JOptionPane.showOptionDialog(null, "Do you make more changes?", null, JOptionPane.DEFAULT_OPTION,
+	                JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+	
+	            if (md == 1)
+	            { cont = false; }
+	          }
+	          if (choice == 1) // order Side
+	          {
+	            // create a statement object
+	            Statement stmt = conn.createStatement();
+	            // create an SQL statement
+	            String sqlStatement2 = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Side\' ORDER BY \"Item_ID\"";
+	            // send statement to DBMS
+	            ResultSet result = stmt.executeQuery(sqlStatement2);
+	
+	            // retrieve all entree items from menu table
+	            ArrayList<String> arr1 = new ArrayList<String>();
+	            while (result.next())
+	            {
+	              menu_item = result.getString("Name");
+	              arr1.add(menu_item);
+	            }
+	
+	            // store entree menu items in array list to display as buttons
+	            String[] entree_choice = new String[arr1.size()];
+	            for (int i = 0; i < arr1.size(); i++)
+	            {
+	              entree_choice[i] = arr1.get(i);
+	            }
+	
+	            int e_choice = JOptionPane.showOptionDialog(null, "Select side: ", "Menu", JOptionPane.DEFAULT_OPTION,
+	              JOptionPane.QUESTION_MESSAGE, null, entree_choice, entree_choice[0]);
+	
+	            Statement stmt1 = conn.createStatement();
+	
+	            // Select item and check stock
+	            int stockInt = 0;
+	            Statement stock = conn.createStatement();
+	            String stockCheck = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Item_ID\" = 'S"+(e_choice+1)+"'";
+	            ResultSet resultStock = stock.executeQuery(stockCheck);
+	            while (resultStock.next())
+	            { stockInt = resultStock.getInt("Stock"); }
+	
+	            if (stockInt > 0) {
+	              // do while for error checking price
+	              do {
+	                String priceAdmin = JOptionPane.showInputDialog("New price: ");
+	                // If does error checking on null, empty, and letters.
+	                if (!(priceAdmin == null) && !priceAdmin.isEmpty() && !priceAdmin.matches("[a-zA-Z]+"))
+	                  newprice = Double.parseDouble(priceAdmin);
+	              } while (!(newprice >= 0.00));
+	              String sqlStatement1 = "UPDATE \"Menu\" SET \"Price\" = '"+ newprice +"' WHERE \"Item_ID\" = 'S"+(e_choice+1)+"'";
+	              stmt1.executeUpdate(sqlStatement1);
+	            } else {
+	              JOptionPane.showMessageDialog(null,"Stock count is 0");
+	            }
+	
+	            String[] moreDone = { "Yes", "No" };
+	            int md = JOptionPane.showOptionDialog(null, "Do you make more changes?", null, JOptionPane.DEFAULT_OPTION,
+	                JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+	
+	            if (md == 1)
+	            { cont = false; }
+	          }
+	          if (choice == 2) // order Drink
+	          {
+	            // create a statement object
+	            Statement stmt = conn.createStatement();
+	            // create an SQL statement
+	            String sqlStatement2 = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Drink\' ORDER BY \"Item_ID\"";
+	            // send statement to DBMS
+	            ResultSet result = stmt.executeQuery(sqlStatement2);
+	
+	            // retrieve all entree items from menu table
+	            ArrayList<String> arr1 = new ArrayList<String>();
+	            while (result.next())
+	            {
+	              menu_item = result.getString("Name");
+	              arr1.add(menu_item);
+	            }
+	
+	            // store entree menu items in array list to display as buttons
+	            String[] entree_choice = new String[arr1.size()];
+	            for (int i = 0; i < arr1.size(); i++)
+	            {
+	              entree_choice[i] = arr1.get(i);
+	            }
+	
+	            int e_choice = JOptionPane.showOptionDialog(null, "Select drink: ", "Menu", JOptionPane.DEFAULT_OPTION,
+	              JOptionPane.QUESTION_MESSAGE, null, entree_choice, entree_choice[0]);
+	
+	            Statement stmt1 = conn.createStatement();
+	
+	            // Select item and check stock
+	            int stockInt = 0;
+	            Statement stock = conn.createStatement();
+	            String stockCheck = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Item_ID\" = 'B"+(e_choice+1)+"'";
+	            ResultSet resultStock = stock.executeQuery(stockCheck);
+	            while (resultStock.next())
+	            { stockInt = resultStock.getInt("Stock"); }
+	
+	            if (stockInt > 0) {
+	              // do while for error checking price
+	              do {
+	                String priceAdmin = JOptionPane.showInputDialog("New price: ");
+	                // If does error checking on null, empty, and letters.
+	                if (!(priceAdmin == null) && !priceAdmin.isEmpty() && !priceAdmin.matches("[a-zA-Z]+"))
+	                  newprice = Double.parseDouble(priceAdmin);
+	              } while (!(newprice >= 0.00));
+	              String sqlStatement1 = "UPDATE \"Menu\" SET \"Price\" = '"+ newprice +"' WHERE \"Item_ID\" = 'B"+(e_choice+1)+"'";
+	              stmt1.executeUpdate(sqlStatement1);
+	            } else {
+	              JOptionPane.showMessageDialog(null,"Stock count is 0");
+	            }
+	
+	            String[] moreDone = { "Yes", "No" };
+	            int md = JOptionPane.showOptionDialog(null, "Do you make more changes?", null, JOptionPane.DEFAULT_OPTION,
+	                JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+	
+	            if (md == 1)
+	            { cont = false; }
+	          }
+	          if (choice == 3) // order dessert
+	          {
+	            // create a statement object
+	            Statement stmt = conn.createStatement();
+	            // create an SQL statement
+	            String sqlStatement2 = "SELECT \"Name\" FROM \"Menu\" WHERE \"Type\" =\'Dessert\' ORDER BY \"Item_ID\"";
+	            // send statement to DBMS
+	            ResultSet result = stmt.executeQuery(sqlStatement2);
+	
+	            // retrieve all entree items from menu table
+	            ArrayList<String> arr1 = new ArrayList<String>();
+	            while (result.next())
+	            {
+	              menu_item = result.getString("Name");
+	              arr1.add(menu_item);
+	            }
+	
+	            // store entree menu items in array list to display as buttons
+	            String[] entree_choice = new String[arr1.size()];
+	            for (int i = 0; i < arr1.size(); i++)
+	            {
+	              entree_choice[i] = arr1.get(i);
+	            }
+	
+	            int e_choice = JOptionPane.showOptionDialog(null, "Select dessert: ", "Menu", JOptionPane.DEFAULT_OPTION,
+	              JOptionPane.QUESTION_MESSAGE, null, entree_choice, entree_choice[0]);
+	
+	            Statement stmt1 = conn.createStatement();
+	
+	            // Select item and check stock
+	            int stockInt = 0;
+	            Statement stock = conn.createStatement();
+	            String stockCheck = "SELECT \"Stock\" FROM \"Menu\" WHERE \"Item_ID\" = 'D"+(e_choice+1)+"'";
+	            ResultSet resultStock = stock.executeQuery(stockCheck);
+	            while (resultStock.next())
+	            { stockInt = resultStock.getInt("Stock"); }
+	
+	            if (stockInt > 0) {
+	              // do while for error checking price
+	              do {
+	                String priceAdmin = JOptionPane.showInputDialog("New price: ");
+	                // If does error checking on null, empty, and letters.
+	                if (!(priceAdmin == null) && !priceAdmin.isEmpty() && !priceAdmin.matches("[a-zA-Z]+"))
+	                  newprice = Double.parseDouble(priceAdmin);
+	              } while (!(newprice >= 0.00));
+	              String sqlStatement1 = "UPDATE \"Menu\" SET \"Price\" = '"+ newprice +"' WHERE \"Item_ID\" = 'D"+(e_choice+1)+"'";
+	              stmt1.executeUpdate(sqlStatement1);
+	            } else {
+	              JOptionPane.showMessageDialog(null,"Stock count is 0");
+	            }
+	
+	            String[] moreDone = { "Yes", "No" };
+	            int md = JOptionPane.showOptionDialog(null, "Do you make more changes?", null, JOptionPane.DEFAULT_OPTION,
+	                JOptionPane.QUESTION_MESSAGE, null, moreDone, moreDone[0]);
+	
+	            if (md == 1)
+	            { cont = false; }
+	          }
+	
+	        }
+	      }//end try
+	      catch (Exception e) {
+	        JOptionPane.showMessageDialog(null, "Error accessing Database.");
+	      }
       }
     } // end admin
   }// end main
